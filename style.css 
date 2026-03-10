@@ -1,0 +1,78 @@
+/* ========================================= */
+/* style.css                                 */
+/* ========================================= */
+
+/* --- 폰트 및 기본 설정 (모든 페이지 공통) --- */
+@font-face {
+  font-family: 'SchoolSafetyGoodSupport';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimBareondotumR.woff2') format('woff2');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'SchoolSafetyGoodSupport';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-2@1.0/HakgyoansimBareondotumB.woff2') format('woff2');
+  font-weight: 700; font-display: swap;
+}
+html, body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'SchoolSafetyGoodSupport', sans-serif;
+}
+
+/* --- 파티클 캔버스 (공통) --- */
+/* ID를 screen -> particle-canvas 로 바꿀 예정입니다. */
+#particle-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1; pointer-events: none;
+}
+
+/* --- 시작 화면 전용 스타일 --- */
+/* 아래 모든 스타일에 #start-screen-overlay 라는 안전장치를 붙였습니다. */
+#start-screen-overlay .screen-section {
+  width: 100%; height: 100vh; position: relative;
+  display: flex; justify-content: center; align-items: center;
+  overflow: hidden;
+}
+#start-screen-overlay #intro-screen {
+  background-color: rgb(0, 55, 255);
+  cursor: pointer;
+}
+#start-screen-overlay #intro-screen img {
+  width: 39vw; max-width: 600px; height: auto; z-index: 2;
+  animation: floating 3s ease-in-out infinite;
+}
+#start-screen-overlay #main-menu-screen {
+  --gradient-start: #003cff; --gradient-end: #ffffff;
+  --dot-color: rgba(0, 0, 0, 0.05); --dot-size: 2px; --dot-spacing: 8px;
+  background-image: radial-gradient(circle, var(--dot-color) var(--dot-size), transparent 0), linear-gradient(to top, var(--gradient-end), var(--gradient-start));
+  background-size: var(--dot-spacing) var(--dot-spacing), cover;
+}
+#start-screen-overlay .menu-element { position: absolute; }
+#start-screen-overlay #background-planet { width: 120%; height: auto; opacity: 0.9; z-index: 1; }
+#start-screen-overlay #character-main { bottom: -45%; right: -1%; width: 66vw; z-index: 15; }
+#start-screen-overlay #character-mascot { bottom: -40%; right: 0%; width: 55vw; z-index: 20; }
+#start-screen-overlay #game-logo { top: 16%; left: 8%; width: 36vw; animation: floating 3s ease-in-out infinite; z-index: 3; }
+#start-screen-overlay .menu-buttons { bottom: 20%; left: 5%; display: flex; flex-direction: column; z-index: 21; }
+#start-screen-overlay .dialogue-box { bottom: 5%; left: 5%; background-color: rgba(255, 255, 255, 0.9); border: 2px solid #003CFF; border-radius: 10px; padding: 15px; color: #043fff; text-align: left; font-size: 1.2vw; z-index: 22; }
+#start-screen-overlay .menu-buttons button {
+    font-family: 'SchoolSafetyGoodSupport', sans-serif;
+    font-size: 1.4vw; font-weight: 700; color: #003CFF;
+    border-radius: 100px; border: 2px solid #003CFF;
+    background: linear-gradient(180deg, #FFF -22.79%, #9DB4FF 138.97%);
+    padding: 10px 30px; margin-bottom: 17px; cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+#start-screen-overlay .menu-buttons button:hover {
+    border: 2px solid #FFF;
+    background: linear-gradient(180deg, #B2C9FF -22.79%, #003BFE 138.97%); color: white;
+    transform: scale(1.1);
+}
+#start-screen-overlay .dialogue-box .speaker { font-weight: 700; font-size: 1.2vw; }
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}

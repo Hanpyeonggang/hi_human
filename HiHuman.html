@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hi Human</title>
+    <!-- 1. CSS 파일을 연결합니다. -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- BGM 오디오와 파티클 캔버스는 한 번만 선언합니다. -->
+    <audio id="bgm-audio" loop><source src="bgm.mp3" type="audio/mpeg"></audio>
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- 모든 오버레이 화면들을 담을 컨테이너 -->
+    <div class="overlays-container">
+
+        <!-- 'index.html'의 내용물은 이 'start-screen-overlay' 안에 전부 들어갑니다. -->
+        <!-- 처음엔 보이지 않도록 JS가 제어할 겁니다. -->
+        <div id="start-screen-overlay" class="overlay" style="display: none;">
+            
+            <!-- 1-1. 원래 있던 intro-screen div 입니다. -->
+            <div id="intro-screen" class="screen-section">
+                <img src="index/logo.png" alt="Hi Human Start Logo">
+            </div>
+
+            <!-- 1-2. 원래 있던 main-menu-screen div 입니다. -->
+            <div id="main-menu-screen" class="screen-section">
+                <img src="login/b.png" id="edit-nickname-btn" class="hidden menu-element" alt="닉네임 변경" style="position: absolute; top: 4%; left: 3%; width: 4.3vw; z-index: 20;">
+                <img src="index/world.png" id="background-planet" class="menu-element" alt="Background">
+                <img src="index/logo.png" id="game-logo" class="menu-element" alt="Hi Human Logo">
+                <img src="index/world.png" id="character-main" class="menu-element" alt="Main Character">
+                <img src="index/hellomie.gif" id="character-mascot" class="menu-element" alt="Mascot">
+                
+                <div class="menu-buttons menu-element">
+                    <!-- 페이지 이동(a href) 대신 자바스크립트가 제어할 버튼으로 바꿨습니다. -->
+                    <button id="how-to-play-btn">How to Play</button>
+                    <button id="game-start-btn">Game Start</button>
+                </div>
+        
+                <div class="dialogue-box menu-element">
+                    <div class="speaker">Hellomie</div>
+                    <p>Hi human! 에 접속하신 것을 환영합니다!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 여기에 나중에 howtoplay-overlay, login-overlay 등이 추가될 겁니다. -->
+        <!-- <div id="howtoplay-overlay" class="overlay" style="display: none;"> ... </div> -->
+        <!-- <div id="login-overlay" class="overlay" style="display: none;"> ... </div> -->
+
+    </div>
+
+    <!-- 모든 실제 게임 화면(지도, 스테이지)을 담을 컨테이너 -->
+    <div class="game-screens-container" style="display: none;">
+        <!-- 여기에 나중에 map-screen, stage1-screen 등이 추가될 겁니다. -->
+    </div>
+
+
+    <!-- 2. JavaScript 파일은 body 태그가 닫히기 직전에 연결합니다. -->
+    <script src="game.js"></script>
+</body>
+</html>
