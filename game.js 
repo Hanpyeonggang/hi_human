@@ -1,0 +1,140 @@
+// ===================================================================
+// game.js - 우리 싱글 페이지 게임의 핵심 로직 파일
+// ===================================================================
+
+// -------------------------------------------------------------------
+// 1. 게임 상태 관리 (가장 중요!)
+// -------------------------------------------------------------------
+let gameState = {};
+
+function saveGameState() {
+    localStorage.setItem('hiHumanGameState', JSON.stringify(gameState));
+    console.log("게임 상태 저장 완료:", gameState);
+}
+
+function loadGameState() {
+    const savedState = localStorage.getItem('hiHumanGameState');
+    if (savedState) {
+        gameState = JSON.parse(savedState);
+        console.log("저장된 게임 상태 불러옴:", gameState);
+    } else {
+        gameState = {
+            nickname: '',
+            clearedStage: 0,
+            failureCount: 0,
+        };
+        console.log("저장된 파일 없음. 새 게임 상태로 시작합니다.");
+    }
+}
+
+// -------------------------------------------------------------------
+// 2. 화면 관리자
+// -------------------------------------------------------------------
+function showOverlay(overlayId) {
+    document.querySelectorAll('.overlay').forEach(overlay => {
+        overlay.style.display = 'none';
+    });
+    const overlayToShow = document.getElementById(overlayId);
+    if (overlayToShow) {
+        overlayToShow.style.display = 'block'; // block 또는 flex로 설정
+    }
+}
+
+function showGameScreen(screenId) {
+    document.querySelectorAll('.game-screen').forEach(screen => {
+        screen.style.display = 'none';
+    });
+    const screenToShow = document.getElementById(screenId);
+    if (screenToShow) {
+        screenToShow.style.display = 'block';
+    }
+}
+
+// -------------------------------------------------------------------
+// 3. 공통 기능
+// -------------------------------------------------------------------
+function playBGM() {
+    document.getElementById('bgm-audio').play();
+}
+
+function stopBGM() {
+    document.getElementById('bgm-audio').pause();
+}
+
+// -------------------------------------------------------------------
+// 4. 캡슐 함수들 (각 화면의 로직)
+// -------------------------------------------------------------------
+
+// index.html (시작 화면)의 기능을 담당하는 캡슐 함수
+function initIndex() {
+    const introScreen = document.querySelector('#start-screen-overlay #intro-screen');
+    const howToPlayButton = document.querySelector('#start-screen-overlay #how-to-play-btn');
+    const gameStartButton = document.querySelector('#start-screen-overlay #game-start-btn');
+    const bgm = document.getElementById('bgm-audio');
+
+    // 첫 화면 클릭 기능
+    if (introScreen) {
+        introScreen.addEventListener('click', () => {
+            bgm.play().catch(e => console.log("BGM 재생은 사용자의 첫 클릭 이후에 가능합니다."));
+            
+            // 기존의 스크롤 방식 대신, 첫 화면을 부드럽게 사라지게 합니다.
+            introScreen.style.transition = 'opacity 0.5s';
+            introScreen.style.opacity = '0';
+            setTimeout(() => { introScreen.style.display = 'none'; }, 500);
+
+        }, { once: true }); // 한번만 실행
+    }
+
+    // 'How to Play' 버튼 기능
+    if (howToPlayButton) {
+        howToPlayButton.addEventListener('click', () => {
+            showOverlay('howtoplay-overlay'); // howtoplay 화면을 보여주는 명령
+        });
+    }
+
+    // 'Game Start' 버튼 기능
+    if (gameStartButton) {
+        gameStartButton.addEventListener('click', () => {
+            sessionStorage.setItem('isNewStart', 'true');
+            showOverlay('login-overlay'); // login 화면을 보여주는 명령
+        });
+    }
+}
+
+// (이 아래로 나중에 initHowToPlay, initLogin 등을 채워나갈 겁니다)
+function initHowToPlay() {
+    // 아직 비어있음
+}
+function initLogin() {
+    // 아직 비어있음
+}
+
+// -------------------------------------------------------------------
+// 5. 게임 전체 시작 함수
+// -------------------------------------------------------------------
+function initGame() {
+    loadGameState(); 
+    
+    initIndex(); // index 화면 기능 준비
+    initHowToPlay(); // howtoplay 기능 준비 (지금은 비어있음)
+    initLogin();     // login 기능 준비 (지금은 비어있음)
+
+    // 파티클 배경 애니메이션 코드를 여기에 넣어서 게임 시작과 함께 실행시킵니다.
+    const canvas = document.getElementById("particle-canvas"); 
+    const ctx = canvas.getContext("2d"); 
+    let w, h; 
+    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; } 
+    window.addEventListener("resize", resize); 
+    resize(); 
+    class Circle { constructor() {this.reset();} reset() { this.x = Math.random() * w; this.y = Math.random() * h; this.r = Math.random() * 10 + 5; this.dx = (Math.random() - 0.5) * 1.5; this.dy = (Math.random() - 0.5) * 1.5; this.color = `hsl(${Math.random() * 360}, 100%, 60%)`; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.fill(); } update() { this.x += this.dx; this.y += this.dy; if(this.x < this.r || this.x > w - this.r) this.dx *= -1; if(this.y < this.r || this.y > h - this.r) this.dy *= -1; this.draw(); } } 
+    let circles = []; 
+    for(let i = 0; i < 50; i++) { circles.push(new Circle()); } 
+    function animate() { ctx.clearRect(0, 0, w, h); circles.forEach(c => c.update()); requestAnimationFrame(animate); } 
+    animate();
+    
+    // 모든 준비가 끝나면, 첫 화면인 'start-screen-overlay'를 보여줍니다.
+    showOverlay('start-screen-overlay');
+}
+
+// 웹페이지 로딩이 끝나면 게임을 시작합니다.
+window.onload = initGame;
